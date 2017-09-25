@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="8dp"
+    app:cardCornerRadius="16dp"
+    android:clickable="true"
+    android:layout_marginBottom="10dp"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:padding="10dp">
+
+        <com.liu.mytimer.view.StarView
+            android:id="@+id/image"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_centerVertical="true" />
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="200dp"
+            android:layout_height="30dp"
+            android:layout_alignTop="@id/image"
+            android:layout_toRightOf="@id/image"
+            android:gravity="left|center_vertical"
+            android:text="工作內容:XXXXXXXX"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/totalTime"
+            android:layout_width="200dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/content"
+            android:layout_toRightOf="@id/image"
+            android:gravity="left|center_vertical"
+            android:text="總共時長:XXXXXXXX"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/start_end"
+            android:layout_width="200dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/totalTime"
+            android:layout_toRightOf="@id/image"
+            android:gravity="left|center_vertical"
+            android:text="XXXX~XXXX"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

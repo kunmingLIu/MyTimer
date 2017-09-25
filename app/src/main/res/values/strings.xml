@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">MyTimer</string>
+    <string name="start_time">開始時間:</string>
+    <string name="end_time">結束時間:</string>
+    <string name="total_time">工作時長:</string>
+    <string name="pause_count">暫停次數:</string>
+    <string name="work_content">工作內容:</string>
+    <string name="input_content">請輸入工作內容</string>
+    <string name="expand">展開</string>
+    <string name="ok">確定</string>
+</resources>

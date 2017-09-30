@@ -18,14 +18,6 @@ import android.widget.RemoteViews;
 import com.liu.mytimer.App;
 import com.liu.mytimer.MainActivity;
 import com.liu.mytimer.R;
-import com.liu.mytimer.module.DaoMaster;
-import com.liu.mytimer.module.DaoSession;
-import com.liu.mytimer.module.GroupWorkTime;
-import com.liu.mytimer.module.GroupWorkTimeDao;
-
-import org.greenrobot.greendao.database.Database;
-
-import java.util.List;
 
 /**
  * Created by kunming.liu on 2017/9/20.
@@ -54,9 +46,6 @@ public class ForegroundTimerService extends Service {
     private static boolean isPlayInService = false;
     private int temp ;
 
-    private DaoSession daoSession = null;
-    private GroupWorkTimeDao groupWorkTimeDao = null;
-    private List<GroupWorkTime> groupWorkTimeList = null;
 
     @Override
     public void onCreate() {

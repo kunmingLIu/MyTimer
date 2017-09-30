@@ -68,33 +68,6 @@
             android:layout_toRightOf="@id/txtTotalTimeTitle"
             android:text="00:00:00"/>
 
-        <TextView
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:gravity="center"
-            android:textSize="22sp"
-            android:id="@+id/txtPauseTitle"
-            android:textColor="@color/colorPrimary"
-            android:layout_below="@id/txtTotalTimeTitle"
-            android:text="@string/pause_count"/>
-
-        <TextView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:gravity="center"
-            android:textSize="22sp"
-            android:id="@+id/txtPause"
-            android:layout_below="@id/txtTotalTime"
-            android:layout_toRightOf="@id/txtPauseTitle"
-            android:text="3"/>
-
-        <Button
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:text="@string/expand"
-            android:id="@+id/btnExpand"
-            android:layout_below="@id/txtTotalTime"
-            android:layout_toRightOf="@id/txtPause"/>
 
     </RelativeLayout>
 
@@ -129,13 +102,5 @@
             android:text="@string/ok" />
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:visibility="gone"
-        android:layout_gravity="center_horizontal">
-    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

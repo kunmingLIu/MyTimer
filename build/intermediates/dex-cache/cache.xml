@@ -3,21 +3,21 @@
 
     <item
         is-multidex="true"
-        jar="/Users/kunmingliu/Downloads/MyTimer-master/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jar="/Users/kunmingliu/MyTimer/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         optimize="true"
         revision="26.0.1"
-        sha1="c34c092329ddd3971bdd50a5f73861595c968f4e">
-        <dex dex="/Users/kunmingliu/Downloads/MyTimer-master/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_8acb16c162a5de40de92f2aafd7a58655408d451/classes.dex" />
+        sha1="6f7551f53540c9267c9bab0a8caccc79db784529">
+        <dex dex="/Users/kunmingliu/MyTimer/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_80806eed3d5aaac92778fbd3161935db61cd97a9/classes.dex" />
     </item>
     <item
         is-multidex="true"
-        jar="/Users/kunmingliu/Downloads/MyTimer-master/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jar="/Users/kunmingliu/MyTimer/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
         optimize="true"
         revision="26.0.1"
         sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
-        <dex dex="/Users/kunmingliu/Downloads/MyTimer-master/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_1cb7b26e79544d11c82a3324aef6234aac004b83/classes.dex" />
+        <dex dex="/Users/kunmingliu/MyTimer/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_098741423ea7cd2a656b703ed033251ef419ce37/classes.dex" />
     </item>
 
 </items>

@@ -1,10 +1,7 @@
-package com.liu.mytimer.Utils;
+package com.liu.mytimer.utils;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by kunming.liu on 2017/9/19.
@@ -41,5 +38,15 @@ public class Prefs {
                 .edit()
                 .putString("end_time", stopTime)
                 .commit();
+    }
+    public static void saveFirstTime(Context context , boolean isFirst){
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean("first_time", isFirst)
+                .commit();
+    }
+    public static boolean isFirstTime(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean("first_time", true);
     }
 }

@@ -8,4 +8,9 @@
     <string name="input_content">請輸入工作內容</string>
     <string name="expand">展開</string>
     <string name="ok">確定</string>
+    <string name="cancel">取消</string>
+    <string name="delete">刪除</string>
+    <string name="stop">停止</string>
+    <string name="pause">暫停</string>
+    <string name="play">開始</string>
 </resources>

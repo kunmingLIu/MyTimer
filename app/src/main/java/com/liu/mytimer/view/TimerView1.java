@@ -1,7 +1,6 @@
 package com.liu.mytimer.view;
 
 import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -10,17 +9,13 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.graphics.Rect;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
-import com.liu.mytimer.Utils.Util;
+import com.liu.mytimer.utils.Util;
 
 
 /**
@@ -100,6 +95,8 @@ public class TimerView1 extends View {
         minute = 0;
         hour  = 0;
         milliSecond = 0;
+
+//        setWillNotDraw(true);
 
 //        timerRunnable = new TimerRunnable();
 
@@ -234,7 +231,6 @@ public class TimerView1 extends View {
         animator.start();
     }
     private void reStartAnimation(int pauseMillSecond){
-        Util.log("pauseMillSecond = %d",pauseMillSecond);
         //pauseMillSecond/100 會等於0 ，要先轉成float再算
         //先算出說此刻的pauseMillSecond，佔了整個元的多少長度
         final float length = mPathMeasure.getLength()*((float)pauseMillSecond/100.0f);
@@ -264,7 +260,6 @@ public class TimerView1 extends View {
             @Override
             public void onAnimationEnd(Animator animation) {
 
-                Util.log("restartAnimator onAnimationEnd");
                 second++;
                 if(second == 60){
                     minute ++;
@@ -284,7 +279,6 @@ public class TimerView1 extends View {
 
             @Override
             public void onAnimationCancel(Animator animation) {
-                Util.log("restartAnimator onAnimationCancel");
 
             }
 
@@ -342,7 +336,6 @@ public class TimerView1 extends View {
      * 暫停計時
      */
     public void pauseTimer(){
-        Util.log("pauseTimer");
         cancelAnimation();
         pauseAnimation();
         //handler.removeCallbacks(timerRunnable);
@@ -443,6 +436,15 @@ public class TimerView1 extends View {
         if( animator != null){
             animator.cancel();
         }
+    }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
     }
 }

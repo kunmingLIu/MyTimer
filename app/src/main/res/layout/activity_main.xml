@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
     android:orientation="vertical"
+    android:background="@color/colorPrimary"
     tools:context="com.liu.mytimer.MainActivity">
 
     <ImageView
@@ -15,6 +15,15 @@
         android:layout_gravity="top|left"
         android:background="@drawable/setting"
         android:visibility="visible" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="test"
+        android:layout_toRightOf="@id/setting"
+        android:layout_alignBottom="@id/setting"
+        android:drawableLeft="@drawable/black_pause"
+        android:id="@+id/text"/>
 
     <com.liu.mytimer.view.TimerView1
         android:id="@+id/timer"

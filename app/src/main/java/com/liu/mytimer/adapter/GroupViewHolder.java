@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.liu.mytimer.R;
+import com.liu.mytimer.view.TimeTableView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,6 +20,8 @@ public class GroupViewHolder  extends RecyclerView.ViewHolder {
     public TextView textDate;
     @BindView(R.id.textCount)
     public TextView textCount;
+    @BindView(R.id.timeTableView)
+    public TimeTableView timeTableView;
     @BindView(R.id.imgExpand)
     public ImageView imgExpand;
     public GroupViewHolder(View itemView) {

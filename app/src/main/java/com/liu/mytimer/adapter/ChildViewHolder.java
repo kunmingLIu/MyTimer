@@ -1,5 +1,6 @@
 package com.liu.mytimer.adapter;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -23,6 +24,8 @@ public class ChildViewHolder extends RecyclerView.ViewHolder {
     public TextView totalTime;
     @BindView(R.id.start_end)
     public TextView start_end;
+    @BindView(R.id.card)
+    public CardView card;
     public ChildViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);

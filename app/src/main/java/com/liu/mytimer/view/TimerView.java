@@ -17,11 +17,6 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
-import com.liu.mytimer.Utils.Util;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 
 /**
  * Created by kunmingliu on 2017/9/18.

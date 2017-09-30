@@ -7,27 +7,29 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.liu.mytimer.MainActivity;
 import com.liu.mytimer.R;
-import com.liu.mytimer.module.DaoSession;
-import com.liu.mytimer.module.GroupWorkTime;
-import com.liu.mytimer.module.GroupWorkTimeDao;
 
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Future;
+import java.util.Calendar;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import static android.support.v4.app.NotificationCompat.PRIORITY_MAX;
 
 /**
  * Created by kunming.liu on 2017/9/20.
@@ -51,12 +53,19 @@ public class ForegroundTimerService1 extends Service {
     private MyBinder myBinder = null;
     private static boolean isPlayInService = false;
 
-    private DaoSession daoSession = null;
-    private GroupWorkTimeDao groupWorkTimeDao = null;
-    private List<GroupWorkTime> groupWorkTimeList = null;
+
     private ScheduledThreadPoolExecutor exec;
     private ScheduledFuture scheduledFuture = null;
-    private List<Future> futures= null;
+    private int now;
+
+    public static String MAIN_ACTION = "com.marothiatechs.customnotification.action.main";
+    public static String INIT_ACTION = "com.marothiatechs.customnotification.action.init";
+    public static String STOP_ACTION = "com.marothiatechs.customnotification.action.prev";
+    public static String PLAY_ACTION = "com.marothiatechs.customnotification.action.play";
+    public static String NEXT_ACTION = "com.marothiatechs.customnotification.action.next";
+    public static String STARTFOREGROUND_ACTION = "com.marothiatechs.customnotification.action.startforeground";
+    public static String STOPFOREGROUND_ACTION = "com.marothiatechs.customnotification.action.stopforeground";
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -86,27 +95,37 @@ public class ForegroundTimerService1 extends Service {
 //                .setWhen(System.currentTimeMillis());
 //        notification = builder.build();
 
+//        Bitmap icon = BitmapFactory.decodeResource(getResources(),
+//                R.drawable.ic_timer_white_48px);
+
+        Bitmap icon = drawableToBitmap(ContextCompat.getDrawable(this,R.drawable.timer));
 
         builder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.timer)
+                //.setContent(remoteView) //一般狀態下的樣式，如果不加這個，當服務不是在順序第一位的時候，就只會出現空白
                 .setCustomBigContentView(remoteView)//不使用big的話，按鈕出現不了
                 //.setCustomContentView(remoteView)//如果不用NotificationCompat的話，此method必須要24以上
-                .setContentIntent(pi)
+                //.setContentIntent(pi)
+                .setPriority(PRIORITY_MAX)
+                .setContentInfo(String.format("%02d:%02d:%02d", hour, minute, second))
                 .setAutoCancel(true);
         notification = builder.build();
 
-
-        Intent stopIntent = new Intent(this, PlayAndStopReceiver.class);
-        stopIntent.putExtra("id", R.id.stop);
-
-        Intent playIntent = new Intent(this, PlayAndStopReceiver.class);
-        playIntent.putExtra("id", R.id.play);
-
-        PendingIntent stopPI = PendingIntent.getBroadcast(this, 1, stopIntent, 0);
-        PendingIntent playPI = PendingIntent.getBroadcast(this, 2, playIntent, 0);
-
-        remoteView.setOnClickPendingIntent(R.id.play, playPI);
-        remoteView.setOnClickPendingIntent(R.id.stop, stopPI);
+        //set click listener
+        Intent leftIntent = new Intent(this, ForegroundTimerService1.class);
+//        leftIntent.putExtra("id", R.id.left);
+        leftIntent.setAction(PLAY_ACTION);
+//
+        Intent rightIntent = new Intent(this, ForegroundTimerService1.class);
+//        rightIntent.putExtra("id", R.id.right);
+        rightIntent.setAction(STOP_ACTION);
+//        PendingIntent leftPI = PendingIntent.getBroadcast(this, 1, leftIntent, 0);
+//        PendingIntent rightPI = PendingIntent.getBroadcast(this, 2, rightIntent, 0);
+        PendingIntent leftPI = PendingIntent.getService(this,1,leftIntent,0);
+        PendingIntent rightPI = PendingIntent.getService(this, 2, rightIntent, 0);
+//
+        remoteView.setOnClickPendingIntent(R.id.left, leftPI);
+        remoteView.setOnClickPendingIntent(R.id.right, rightPI);
 
 
     }
@@ -115,15 +134,30 @@ public class ForegroundTimerService1 extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e("service", "onStartCommand");
         if (intent != null) {
-            hour = intent.getIntExtra("hour", 0);
-            minute = intent.getIntExtra("minute", 0);
-            second = intent.getIntExtra("second", 0);
-            milliSecond = intent.getIntExtra("millisecond", 0) * 10;
+            if(intent.getAction() != null){
+                if(intent.getAction().equals(PLAY_ACTION)){
+                    remoteView.setImageViewResource(R.id.right_icon,R.drawable.black_pause);
+                }else if(intent.getAction().equals(STOP_ACTION)){
+                    remoteView.setImageViewResource(R.id.right_icon,R.drawable.black_stop);
+                }
+                notificationManager.notify(1, notification);//改變完要刷新，不然要等到下一秒才會刷新 這樣體驗不好，感覺很LAG
+            }else{
+                hour = intent.getIntExtra("hour", 0);
+                minute = intent.getIntExtra("minute", 0);
+                second = intent.getIntExtra("second", 0);
+                milliSecond = intent.getIntExtra("millisecond", 0) * 10;
+                now = intent.getIntExtra("now", 0);
+                milliSecond = milliSecond + (Calendar.getInstance().get(Calendar.MILLISECOND)-now);
+
+                scheduledFuture = exec.scheduleAtFixedRate(timerRunnable, (1000 - milliSecond), 1 * 1000, TimeUnit.MILLISECONDS);
+                milliSecond = 0;
+                startForeground(1, notification);
+            }
 
         }
-        scheduledFuture = exec.scheduleAtFixedRate(timerRunnable, (1000 - milliSecond), 1 * 100, TimeUnit.MILLISECONDS);
-        milliSecond = 0;
-        startForeground(1, notification);
+        //milliSecond = Calendar.getInstance().get(Calendar.MILLISECOND);
+
+
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -142,10 +176,12 @@ public class ForegroundTimerService1 extends Service {
         public void run() {
 //            builder.setContentText()
             isPlayInService = true;
-            milliSecond += 100;
+            milliSecond += 1000;
             calToSecMinAndHour();
 //            builder.setContentTitle(String.format("%02d:%02d:%02d",hour,minute,second));
             remoteView.setTextViewText(R.id.txtTile, String.format("%02d:%02d:%02d", hour, minute, second));
+
+            builder.setContentInfo(String.format("%02d:%02d:%02d", hour, minute, second));
             notification = builder.build();
             notificationManager.notify(1, notification);
             //handler.postDelayed(this, 1 * 1000);
@@ -175,11 +211,12 @@ public class ForegroundTimerService1 extends Service {
         Log.e("service", "onDestroy");
         isPlayInService = false;
         //有時後前台服務的圖示不會消失，但是目前尚未解決
-        scheduledFuture.cancel(true);
-        exec.schedule(new MyRunnable(),100,TimeUnit.MILLISECONDS);
-        exec.shutdown();
-        exec.shutdownNow();
+//        scheduledFuture.cancel(true);
+//        exec.schedule(new MyRunnable(),100,TimeUnit.MILLISECONDS);
+//        exec.shutdown();
+//        exec.shutdownNow();
         stopForeground(true);
+        //stopSelf();
 
     }
 
@@ -213,11 +250,22 @@ public class ForegroundTimerService1 extends Service {
         public boolean isPlayInService() {
             return isPlayInService;
         }
+
+        public int getNow(){
+            return Calendar.getInstance().get(Calendar.MILLISECOND);
+        }
+
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
         Log.e("service", "onUnbind");
+        scheduledFuture.cancel(true);
+        exec.schedule(new MyRunnable(),100,TimeUnit.MILLISECONDS);
+        exec.shutdown();
+        exec.shutdownNow();
+        stopForeground(true);
+        stopSelf();
         //太神奇了，居然可以使用!!!!
 //        daoSession = ((App)getApplication()).getDaoSession();
 //        groupWorkTimeDao = daoSession.getGroupWorkTimeDao();
@@ -242,11 +290,14 @@ public class ForegroundTimerService1 extends Service {
         public void onReceive(Context context, Intent intent) {
             Log.d("Here", "I am here");
             int id = intent.getIntExtra("id", -1);
-            if (id == R.id.stop) {
-                isPlayInService = false;
+            if (id == R.id.left) {
+                Log.d("Here", "I am left");
+
+                //isPlayInService = false;
 //                handler.removeCallbacks(timerRunnable);
             } else {
-                isPlayInService = true;
+                Log.d("Here", "I am right");
+                //isPlayInService = true;
 //                handler.post(timerRunnable);
             }
         }
@@ -259,6 +310,19 @@ public class ForegroundTimerService1 extends Service {
 //            notification = builder.build();
 //            notificationManager.notify(1, notification);
         }
+    }
+    public  Bitmap drawableToBitmap (Drawable drawable) {
+
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable)drawable).getBitmap();
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
     }
 
 }

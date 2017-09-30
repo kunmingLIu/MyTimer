@@ -15,7 +15,6 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.liu.mytimer.R;
-import com.liu.mytimer.Utils.Util;
 
 /**
  * Created by kunmingliu on 2017/9/20.

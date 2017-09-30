@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="showAnim" format="boolean"></attr>
+
+    <declare-styleable name="TimeTableView">
+        <attr name="showAnim"></attr>
+    </declare-styleable>
+</resources>
